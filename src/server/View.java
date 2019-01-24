@@ -20,8 +20,8 @@ import javax.swing.JPanel;
 public class View extends javax.swing.JFrame {
     static JButton jb[] = new JButton[40];
     JPanel jp1 = new JPanel();
-    static ImageIcon on = new ImageIcon("on.png");
-    static ImageIcon off = new ImageIcon("off.png");
+    static ImageIcon on = new ImageIcon("src/IMG/on.png");
+    static ImageIcon off = new ImageIcon("src/IMG/off.png");
     
     Function b = new Function();
     /**
@@ -32,8 +32,8 @@ public class View extends javax.swing.JFrame {
         initComponents();
         for (int i = 0; i < 40; i++) {
             jb[i] = new JButton();
-            jb[i].setIcon(off);
-            jb[i].setEnabled(false);
+            //jb[i].setIcon(off);
+            //jb[i].setEnabled(false);
             jPanel1.add(jb[i]);
         }
         //connect database add/edit  student course

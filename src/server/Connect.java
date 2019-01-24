@@ -28,20 +28,24 @@ import javax.swing.JOptionPane;
 public class Connect {
 
     public static ServerSocket ss;
+    Timer timer = new Timer();
     public static Socket sock;
     static String ip;
     String[] ipclient = new String[80];
     String[] ipall = new String[80];
+    static String[] onoff = new String[40];
     ArrayList<Integer> list = new ArrayList<Integer>();
     int clientnumber;
 
     public Connect() {
+        timer.schedule(checkarray, 0, 5000);
         for (int i = 0; i < 40; i++) {
             if (i == 39) {
                 ipclient[39] = "127.0.0.1";
             } else {
                 ipclient[i] = "1";
             }
+            onoff[i] = "off";
         }
         for (int i = 0; i < 40; i++) {
             list.add(new Integer(i + 1));
@@ -54,7 +58,6 @@ public class Connect {
             ss = new ServerSocket(25000);
             while (true) {
                 sock = ss.accept();
-                //ipall[clientnumber] = getip();
                 clientnumber = button();
                 new Thread(new Recive(list.get(clientnumber), clientnumber)).start();
                 new Thread(new Send(ipall[clientnumber], clientnumber, list.get(clientnumber))).start();
@@ -76,8 +79,16 @@ public class Connect {
         return ip;
     }
 
-    public void setport() {
-
+    public static void seton(int clientumber) {
+        onoff[clientumber] = "online";
+        int k = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(onoff[k++] + "\t");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
     public int button() {
@@ -85,13 +96,26 @@ public class Connect {
         for (i = 0; i < 40; i++) {
             if (getip().equals(ipclient[i])) {
                 System.out.println(i);
-                View.jb[i].setEnabled(true);
-                View.jb[i].setIcon(View.on);
                 break;
             }
         }
         return i;
     }
+
+    TimerTask checkarray = new TimerTask() {
+        public void run() {
+            for (int i = 0; i < 40; i++) {
+                if (onoff[i].equals("online")) {
+                    View.jb[i].setEnabled(true);
+                    View.jb[i].setIcon(View.on);
+                    onoff[i] = "offline";
+                } else {
+                    View.jb[i].setEnabled(false);
+                    View.jb[i].setIcon(View.off);
+                }
+            }
+        }
+    };
 
 }
 
@@ -167,7 +191,7 @@ class Send implements Runnable {
                         break;
                     case 2:
                         System.out.println("Check");
-                        
+
                         break;
                     default:
                         break;
@@ -184,7 +208,7 @@ class Recive implements Runnable {
     String msg;
     Socket recive;
     int clientnumber, port;
-    public static BufferedReader read;
+    public BufferedReader read;
 
     public int count = 1;
 
@@ -197,9 +221,13 @@ class Recive implements Runnable {
     public void run() {
         try {
             newss = new ServerSocket(port);
-            Timer.start();
             while (true) {
-                //msg = read.readLine();
+                recive = newss.accept();
+                read = new BufferedReader(new InputStreamReader(recive.getInputStream()));
+                if ((msg = read.readLine()).equals("online")) {
+                    Connect.seton(clientnumber);
+                }
+
             }
         } catch (IOException ex) {
 
@@ -220,4 +248,12 @@ class Recive implements Runnable {
         }
     });
 
+    TimerTask task = new TimerTask() {
+        public void run() {
+            count++;
+        }
+    };
+
+    /*Timer timer = new Timer("Timer");
+    timer.schedule(task, 0, 1000);*/
 }

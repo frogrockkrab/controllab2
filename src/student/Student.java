@@ -73,7 +73,7 @@ public class Student {
 
         @Override
         public void run() {
-            /*myTimer.schedule(new TimerTask() {
+            myTimer.schedule(new TimerTask() {
                 public void run() {
                     try {
                         s = new Socket("localhost", port);
@@ -85,7 +85,7 @@ public class Student {
                         Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            }, 0, 10000);*/
+            }, 0, 5000);
         }
 
     });
