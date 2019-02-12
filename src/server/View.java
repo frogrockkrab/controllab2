@@ -5,13 +5,15 @@
  */
 package server;
 
-import java.awt.Frame;
 import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import static server.Connect.onoff;
 
 /**
  *
@@ -20,24 +22,50 @@ import javax.swing.JPanel;
 public class View extends javax.swing.JFrame {
     static JButton jb[] = new JButton[40];
     JPanel jp1 = new JPanel();
+    static Connect a = new Connect();
+    Function b = new Function();
+    
     static ImageIcon on = new ImageIcon("src/IMG/on.png");
     static ImageIcon off = new ImageIcon("src/IMG/off.png");
     
-    Function b = new Function();
+    static Timer timer = new Timer();
+    
     /**
      * Creates new form View
      */
     public View() {
-        
         initComponents();
         for (int i = 0; i < 40; i++) {
             jb[i] = new JButton();
-            //jb[i].setIcon(off);
-            //jb[i].setEnabled(false);
             jPanel1.add(jb[i]);
         }
+        
+        timer.schedule(checkarray, 0, 5000);
         //connect database add/edit  student course
     }
+    
+    static TimerTask checkarray = new TimerTask() {
+        public void run() {
+            int k = 0;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(onoff[k++] + "\t");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            for (int i = 0; i < 40; i++) {
+                if (onoff[i].equals("online")) {
+                    jb[i].setEnabled(true);
+                    jb[i].setIcon(on);
+                    onoff[i] = "offline";
+                } else {
+                    jb[i].setEnabled(false);
+                    jb[i].setIcon(off);
+                }
+            }
+        }
+    };
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,7 +79,8 @@ public class View extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         addstudent = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        addcourse = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -70,7 +99,19 @@ public class View extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Add Course");
+        addcourse.setText("Add Course");
+        addcourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addcourseActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -79,18 +120,22 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(addstudent))
+                    .addComponent(addstudent)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addcourse, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(80, 80, 80)
+                .addGap(21, 21, 21)
                 .addComponent(addstudent)
-                .addGap(41, 41, 41)
-                .addComponent(jButton3)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(addcourse)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(152, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, -1, -1));
@@ -99,12 +144,21 @@ public class View extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addstudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addstudentActionPerformed
-        try {
+        /*try {
             b.addstudent();
         } catch (SQLException ex) {
             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        b.addstudent();
     }//GEN-LAST:event_addstudentActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void addcourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addcourseActionPerformed
+        b.editcourse();
+    }//GEN-LAST:event_addcourseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -115,7 +169,7 @@ public class View extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -140,13 +194,14 @@ public class View extends javax.swing.JFrame {
                 t1.setVisible(true);
             }
         });
-        Connect a = new Connect();
-        a.con();
+        System.out.println("view");
+        a.createserver();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addcourse;
     private javax.swing.JButton addstudent;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

@@ -3,7 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package teacher;
+package server;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -11,9 +20,10 @@ package teacher;
  */
 public class teacherlogin extends javax.swing.JFrame {
 
-    /**
-     * Creates new form teacherlogin
-     */
+    Connection con = null;
+    String url = "jdbc:mysql://localhost/controllab";
+    String drinks[] = {"water", "coffee", "tea"};
+    static View view = new View();
     public teacherlogin() {
         initComponents();
     }
@@ -35,22 +45,23 @@ public class teacherlogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        jButton1.setText("login");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jPasswordField1.setText("jPasswordField1");
+        jLabel1.setText("Username");
 
-        jTextField1.setText("jTextField1");
-
-        jLabel1.setText("jLabel1");
-
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Password");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(106, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(131, 131, 131)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -58,13 +69,13 @@ public class teacherlogin extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPasswordField1)
                     .addComponent(jButton1)
-                    .addComponent(jTextField1))
-                .addGap(122, 122, 122))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -74,11 +85,47 @@ public class teacherlogin extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addGap(48, 48, 48)
                 .addComponent(jButton1)
-                .addGap(81, 81, 81))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String Username = jTextField1.getText();
+        String Password = String.valueOf(jPasswordField1.getPassword());
+        String sql = "SELECT * FROM  teacher " + " WHERE Te_Username = ? " + " AND Te_Password = ? ";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, "root", "");
+            PreparedStatement pre = con.prepareStatement(sql);
+            pre.setString(1, Username);
+            pre.setString(2, Password);
+
+            ResultSet rec = pre.executeQuery();
+
+            if (rec.next()) {
+                JOptionPane.showMessageDialog(null, "Success");
+                this.setVisible(false);
+                this.dispose();
+                view.main(drinks);
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed");
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(Ad.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            //finally block used to close resources
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -114,9 +161,9 @@ public class teacherlogin extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private static javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField jPasswordField1;

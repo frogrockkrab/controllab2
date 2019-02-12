@@ -3,14 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Project/Programs/Project/src/teacher/teacherlogin.java</file>
+            <file>file:/D:/Project/Programs/Project/src/project/MyForm.java</file>
             <file>file:/D:/Project/Programs/Project/src/teacher/Teacher.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/teacherlogin.java</file>
             <file>file:/D:/Project/Programs/Project/src/student/StudentLogin.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Student.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Addstudent.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Function.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Add.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Editcourse.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Addcourse.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Editstudent.java</file>
+            <file>file:/D:/Project/Programs/Project/src/lab/studentLogin.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Ad.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/View.java</file>
             <file>file:/D:/Project/Programs/Project/src/student/Student.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Connect.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Course.java</file>
         </group>
     </open-files>
 </project-private>

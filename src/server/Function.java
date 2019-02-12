@@ -5,15 +5,6 @@
  */
 package server;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.sql.*;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 /**
  *
@@ -21,10 +12,10 @@ import javax.swing.JTextField;
  */
 public class Function {
 
-    Connection con;
+    /*Connection con;
     JFrame newFrame = new JFrame("New Window");
 
-    public Connection ConnectDB() {
+    /*public Connection ConnectDB() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost/controllab";
@@ -34,31 +25,20 @@ public class Function {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
-    public void addstudent() throws SQLException {
-        Addstudent a = new Addstudent();
+    public void addstudent(){
+        Ad a = new Ad();
         a.main();
-    }
-
-    public void deletestudent() {
-
     }
 
     public void editstudent() {
 
     }
 
-    public void addcourse() {
-
-    }
-
-    public void deletecourse() {
-
-    }
-
     public void editcourse() {
-
+        Editcourse ec = new Editcourse();
+        ec.main();
     }
 
 }

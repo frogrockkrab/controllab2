@@ -48,8 +48,10 @@ public class Student {
                     System.out.println(msg);
                     if (msg.equals("Shutdown")) {
                         System.out.println("Test");
+                         //Run shutdown
                     } else if (msg.equals("Restart")) {
                         System.out.println("Test");
+                         //Run Restart
                     } else {
                         port = Integer.parseInt(msg);
                         recon();
