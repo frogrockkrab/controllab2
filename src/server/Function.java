@@ -12,28 +12,9 @@ package server;
  */
 public class Function {
 
-    /*Connection con;
-    JFrame newFrame = new JFrame("New Window");
-
-    /*public Connection ConnectDB() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost/controllab";
-            con = DriverManager.getConnection(url, "root", "");
-            return con;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
-
-    public void addstudent(){
-        Ad a = new Ad();
-        a.main();
-    }
-
     public void editstudent() {
-
+        Editstudent es = new Editstudent();
+        es.main();
     }
 
     public void editcourse() {

@@ -204,7 +204,7 @@ public class Addcourse extends javax.swing.JDialog {
                 jComboBox1.addItem(Title);
             }
         } catch (Exception ex) {
-            Logger.getLogger(Ad.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Addcourse.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             //finally block used to close resources
             try {

@@ -90,7 +90,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="addstudent">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Add student"/>
+            <Property name="text" type="java.lang.String" value="Edit student"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addstudentActionPerformed"/>
@@ -98,7 +98,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="addcourse">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Add Course"/>
+            <Property name="text" type="java.lang.String" value="Edit Course"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addcourseActionPerformed"/>
@@ -106,7 +106,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jButton1"/>
+            <Property name="text" type="java.lang.String" value="Internet"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>

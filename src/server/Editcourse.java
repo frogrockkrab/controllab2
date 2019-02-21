@@ -63,7 +63,7 @@ public class Editcourse extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Timetable"));
 
@@ -170,7 +170,7 @@ public class Editcourse extends javax.swing.JFrame {
         a.setModal(true);
         a.setVisible(true);
         if (a.Confirm) {
-            String query = "INSERT INTO `course`(`Co_Title`, `Co_Sec`, `Te_Username`) VALUES ('" + a.Subject + "','" + a.Section + "','test')";
+            String query = "INSERT INTO `course`(`Co_Title`, `Co_Section`, `Te_Username`) VALUES ('" + a.Subject + "','" + a.Section + "','"+Login.Teacherusername+"')";
             Query(query, "Inserted");
         }
         
@@ -178,10 +178,10 @@ public class Editcourse extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         String query;
-        query = "DELETE FROM `register` WHERE `Co_Title`='" + subject + "' AND `Co_Sec`='" + sec + "'";
+        query = "DELETE FROM `register` WHERE `Co_Title`='" + subject + "' AND `Co_Section`='" + sec + "'";
         subQuery(query, "Delete");
         
-        query = "DELETE FROM `course` WHERE `Co_Title`='" + subject + "' AND `Co_Sec`='" + sec + "'";
+        query = "DELETE FROM `course` WHERE `Co_Title`='" + subject + "' AND `Co_Section`='" + sec + "'";
         Query(query, "Delete");
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -273,11 +273,11 @@ public class Editcourse extends javax.swing.JFrame {
         ResultSet rs;
         try {
             pre = connection.prepareStatement(sql);
-            pre.setString(1, "Test");
+            pre.setString(1, Login.Teacherusername);
             rs = pre.executeQuery();
             Course course;
             while (rs.next()) {
-                course = new Course(rs.getString("Co_Title"), rs.getInt("Co_Sec"));
+                course = new Course(rs.getString("Co_Title"), rs.getInt("Co_Section"));
                 courselist.add(course);
             }
         } catch (Exception ex) {

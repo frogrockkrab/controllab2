@@ -227,7 +227,7 @@ public class Addsubject extends javax.swing.JDialog {
                 jComboBox1.addItem(Title);
             }
         } catch (Exception ex) {
-            Logger.getLogger(Ad.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Addsubject.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             //finally block used to close resources
             try {
@@ -241,7 +241,7 @@ public class Addsubject extends javax.swing.JDialog {
     }
 
     private void findcombo2() {
-        String sql2 = " SELECT Co_Sec FROM  Course " + " WHERE Co_Title = ? ";
+        String sql2 = " SELECT Co_Section FROM  Course " + " WHERE Co_Title = ? ";
         if (jComboBox1.getSelectedItem() != null) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -251,11 +251,11 @@ public class Addsubject extends javax.swing.JDialog {
                 ResultSet rs = pre.executeQuery();
                 jComboBox2.removeAllItems();
                 while (rs.next()) {
-                    String Section = rs.getString("Co_Sec");
+                    String Section = rs.getString("Co_Section");
                     jComboBox2.addItem(Section);
                 }
             } catch (Exception ex) {
-                Logger.getLogger(Ad.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Addsubject.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 //finally block used to close resources
                 try {
@@ -285,7 +285,7 @@ public class Addsubject extends javax.swing.JDialog {
     public ArrayList<Register> RegisterList() {
         ArrayList<Register> registerlist = new ArrayList<>();
         Connection connection = getconnect();
-        String sql = "SELECT `Co_Title`, `Co_Sec` FROM `register` WHERE `St_Username` = '" + Editstudent.user + "'";
+        String sql = "SELECT `Co_Title`, `Co_Section` FROM `register` WHERE `St_Username` = '" + Editstudent.user + "'";
         PreparedStatement pre;
         ResultSet rs;
         try {
@@ -293,7 +293,7 @@ public class Addsubject extends javax.swing.JDialog {
             rs = pre.executeQuery();
             Register register;
             while (rs.next()) {
-                register = new Register(rs.getString("Co_Title"), rs.getString("Co_Sec"));
+                register = new Register(rs.getString("Co_Title"), rs.getString("Co_Section"));
                 registerlist.add(register);
             }
         } catch (Exception ex) {

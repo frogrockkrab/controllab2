@@ -23,8 +23,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import static server.View.jb;
 
 /**
  *
@@ -38,13 +38,15 @@ public class Connect {
     String[] ipclient = new String[80];
     String[] ipall = new String[80];
     static String[] onoff = new String[40];
-    ArrayList<Integer> list = new ArrayList<Integer>();
+    ArrayList<Integer> list = new ArrayList<>();
     int clientnumber;
     static Thread Send[] = new Thread[40];
     static Thread Recive[] = new Thread[40];
     int j = 0;
+    static Timer timer = new Timer();
 
     public Connect() {
+
         System.out.println("hello");
         for (int i = 0; i < 40; i++) {
             if (i == 39) {
@@ -55,28 +57,52 @@ public class Connect {
             onoff[i] = "offline";
         }
         for (int i = 0; i < 40; i++) {
-            list.add(new Integer(i + 1));
+            list.add(i + 1);
         }
         Collections.shuffle(list);
+
+        timer.schedule(checkarray, 0, 5000);
+
     }
 
+    TimerTask checkarray = new TimerTask() {
+        public void run() {
+            int k = 0;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(onoff[k++] + "\t");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            for (int i = 0; i < 40; i++) {
+                if (onoff[i].equals("online")) {
+                    jb[i].setEnabled(true);
+                    jb[i].setIcon(View.on);
+                    onoff[i] = "offline";
+                } else {
+                    jb[i].setEnabled(false);
+                    jb[i].setIcon(View.off);
+                }
+            }
+        }
+    };
+
     public void createserver() {
-        System.out.println("open");
         try {
             ss = new ServerSocket(25000);
             System.out.println("open port");
             while (true) {
                 sock = ss.accept();
                 clientnumber = button();
-                Send[j] = new Thread(new Recive(list.get(clientnumber), clientnumber));
+                onoff[clientnumber] = "online";
+                Send[j] = new Thread(new Recive(ipall[clientnumber], list.get(clientnumber), clientnumber));
                 Recive[j] = new Thread(new Send(ipall[clientnumber], clientnumber, list.get(clientnumber)));
                 Send[j].start();
                 Recive[j].start();
                 j++;
-                /*new Thread(new Recive(list.get(clientnumber), clientnumber)).start();
-                new Thread(new Send(ipall[clientnumber], clientnumber, list.get(clientnumber))).start();*/
             }
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
@@ -127,9 +153,9 @@ class Send implements Runnable {
             send.close();
             addoption();
         } catch (IOException ex) {
-
             Logger.getLogger(Send.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("client offline");
     }
 
     private void addoption() {
@@ -195,10 +221,13 @@ class Recive implements Runnable {
     public BufferedReader read;
     Connection con = null;
     String url = "jdbc:mysql://localhost/controllab";
-
+    
+    static String Studentusername;
     public int count = 1;
+    public String ip;
 
-    Recive(int port, int clientnumber) {
+    Recive(String ip, int port, int clientnumber) {
+        this.ip = ip;
         this.port = port + 25000;
         this.clientnumber = clientnumber;
     }
@@ -208,12 +237,14 @@ class Recive implements Runnable {
         try {
             newss = new ServerSocket(port);
             while (true) {
+                //while (!Connect.onoff[clientnumber].equals("exit")) {
                 recive = newss.accept();
                 read = new BufferedReader(new InputStreamReader(recive.getInputStream()));
-                PrintWriter out = new PrintWriter(recive.getOutputStream());
-                if ((msg = read.readLine()).equals("online")) {
+                msg = read.readLine();
+                if (msg.equals("online")) {
                     Connect.onoff[clientnumber] = "online";
-                } else if ((msg = read.readLine()).equals("login")) {
+                } else if (msg.equals("login")) {
+                    System.out.println("//////////////////////////////////////LOgin/////////////////////////////////");
                     String user, pass;
                     user = read.readLine();
                     pass = read.readLine();
@@ -227,26 +258,35 @@ class Recive implements Runnable {
                         pre.setString(1, user);
                         pre.setString(2, pass);
 
+                        System.out.println(user + " " + pass);
                         ResultSet rec = pre.executeQuery();
 
-                        if (rec.next()) {
-                            out.println("success");
-                            clientid = user;
-
-                        } else {
-                            out.println("failed");
+                        Socket s = new Socket(ip, 25005);
+                        try (PrintWriter out = new PrintWriter(s.getOutputStream())) {
+                            if (rec.next()) {
+                                System.out.println("success");
+                                out.println("login");
+                                out.flush();
+                                out.println("success");
+                                out.flush();
+                                Studentusername = user;
+                            } else {
+                                System.out.println("failed");
+                                out.println("failed");
+                                out.flush();
+                            }
+                            out.close();
                         }
-                        out.flush();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-
+                System.out.println("client 39 " + msg);
             }
         } catch (IOException ex) {
-            Connect.Send[39].stop();
+            ex.printStackTrace();
         }
-
+        System.out.println(clientnumber + " offline Stop");
     }
     Thread Timer = new Thread(new Runnable() {
         @Override
@@ -268,6 +308,4 @@ class Recive implements Runnable {
         }
     };
 
-    /*Timer timer = new Timer("Timer");
-    timer.schedule(task, 0, 1000);*/
 }

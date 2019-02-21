@@ -5,11 +5,7 @@
  */
 package server;
 
-import java.sql.SQLException;
-import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,13 +18,12 @@ import static server.Connect.onoff;
 public class View extends javax.swing.JFrame {
     static JButton jb[] = new JButton[40];
     JPanel jp1 = new JPanel();
-    static Connect a = new Connect();
     Function b = new Function();
     
     static ImageIcon on = new ImageIcon("src/IMG/on.png");
     static ImageIcon off = new ImageIcon("src/IMG/off.png");
     
-    static Timer timer = new Timer();
+    
     
     /**
      * Creates new form View
@@ -40,8 +35,6 @@ public class View extends javax.swing.JFrame {
             jPanel1.add(jb[i]);
         }
         
-        timer.schedule(checkarray, 0, 5000);
-        //connect database add/edit  student course
     }
     
     static TimerTask checkarray = new TimerTask() {
@@ -92,21 +85,21 @@ public class View extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 102, 0));
 
-        addstudent.setText("Add student");
+        addstudent.setText("Edit student");
         addstudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addstudentActionPerformed(evt);
             }
         });
 
-        addcourse.setText("Add Course");
+        addcourse.setText("Edit Course");
         addcourse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addcourseActionPerformed(evt);
             }
         });
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Internet");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -144,12 +137,7 @@ public class View extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addstudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addstudentActionPerformed
-        /*try {
-            b.addstudent();
-        } catch (SQLException ex) {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        b.addstudent();
+        b.editstudent();
     }//GEN-LAST:event_addstudentActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -159,45 +147,20 @@ public class View extends javax.swing.JFrame {
     private void addcourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addcourseActionPerformed
         b.editcourse();
     }//GEN-LAST:event_addcourseActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        /*try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    
+    public static void main(String[] args) {
+        Login a = new Login();
+        a.setModal(true);
+        a.setVisible(true);
+        if (a.confirm) {
+            System.out.println("1");
+            View v = new View();
+            v.setVisible(true);
+            Connect connect = new Connect();
+        connect.createserver();
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            View t1 = new View();
-            public void run() {
-                t1.setVisible(true);
-            }
-        });
-        System.out.println("view");
-        a.createserver();
+        /**/
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addcourse;
     private javax.swing.JButton addstudent;

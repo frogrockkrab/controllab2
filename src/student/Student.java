@@ -33,7 +33,7 @@ public class Student {
     public void study() {
         con();
         Reciver.start();
-        
+
     }
     Thread Reciver = new Thread(new Runnable() {
         @Override
@@ -46,27 +46,28 @@ public class Student {
                     read = new BufferedReader(new InputStreamReader(r.getInputStream()));
                     msg = read.readLine();
                     System.out.println(msg);
-                    if (msg.equals("Shutdown")) {
-                        System.out.println("Test");
-                         //Run shutdown
-                    } else if (msg.equals("Restart")) {
-                        System.out.println("Test");
-                         //Run Restart
-                    } else {
-                        port = Integer.parseInt(msg);
-                        recon();
+                    switch (msg) {
+                        case "Shutdown":
+                            System.out.println("Test");
+                            //Run shutdown
+                            break;
+                        case "Restart":
+                            System.out.println("Test");
+                            //Run Restart
+                            break;
+                        case "login":
+                            JOptionPane.showMessageDialog(null, "login Successfully");
+                            StudentLogin.a();
+                            break;
+                        default:
+                            port = Integer.parseInt(msg);
+                            recon();
+                            break;
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }/* finally {
-                try {
-                    ss.close();
-                    System.out.println("Socket close");
-                } catch (IOException ex) {
-                    System.out.println("Error " + ex);
-                }
-            }*/
+            }
         }
     });
 
@@ -75,7 +76,9 @@ public class Student {
 
         @Override
         public void run() {
+
             myTimer.schedule(new TimerTask() {
+
                 public void run() {
                     try {
                         s = new Socket("localhost", port);
@@ -89,7 +92,6 @@ public class Student {
                 }
             }, 0, 5000);
         }
-
     });
 
     public void con() {
@@ -98,14 +100,26 @@ public class Student {
             s.close();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
-            "Server Down","Inane error",
-            JOptionPane.ERROR_MESSAGE);
+                    "Server Down", "Inane error",
+                    JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
     }
 
     public void recon() {
         Sender.start();
+    }
+
+    public void send(String msg) {
+        try {
+            s = new Socket("localhost", port);
+            PrintWriter out1 = new PrintWriter(s.getOutputStream());
+            out1.println(msg);
+            out1.flush();
+            s.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
