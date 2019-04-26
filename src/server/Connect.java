@@ -40,29 +40,50 @@ public class Connect {
     static String[] onoff = new String[40];
     ArrayList<Integer> list = new ArrayList<>();
     int clientnumber;
-    static Thread Send[] = new Thread[40];
-    static Thread Recive[] = new Thread[40];
+    static Thread user[] = new Thread[40];
+
     int j = 0;
     static Timer timer = new Timer();
 
-    public Connect() {
-
-        System.out.println("hello");
-        for (int i = 0; i < 40; i++) {
-            if (i == 39) {
-                ipclient[39] = "127.0.0.1";
-            } else {
-                ipclient[i] = "1";
-            }
-            onoff[i] = "offline";
+    public Connection getconnect() {
+        Connection con;
+        String url = "jdbc:mysql://localhost/controllab";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, "root", "");
+            return con;
+        } catch (Exception ex) {
+            Logger.getLogger(Editcourse.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
+    }
+
+    private void IPList() {
+        Connection connection = getconnect();
+        String sql = " SELECT * FROM  ip";
+        PreparedStatement pre;
+        ResultSet rs;
+        int i = 0;
+        try {
+            pre = connection.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                ipclient[i] = rs.getString("IP_Address");
+                onoff[i] = "offline";
+                i++;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Editcourse.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Connect() {
+        IPList();
         for (int i = 0; i < 40; i++) {
             list.add(i + 1);
         }
         Collections.shuffle(list);
-
         timer.schedule(checkarray, 0, 5000);
-
     }
 
     TimerTask checkarray = new TimerTask() {
@@ -96,11 +117,8 @@ public class Connect {
                 sock = ss.accept();
                 clientnumber = button();
                 onoff[clientnumber] = "online";
-                Send[j] = new Thread(new Recive(ipall[clientnumber], list.get(clientnumber), clientnumber));
-                Recive[j] = new Thread(new Send(ipall[clientnumber], clientnumber, list.get(clientnumber)));
-                Send[j].start();
-                Recive[j].start();
-                j++;
+                user[clientnumber] = new Thread(new User(ipall[clientnumber], list.get(clientnumber), clientnumber));
+                user[clientnumber].start();
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -124,7 +142,31 @@ public class Connect {
         }
         return i;
     }
+}
 
+class User implements Runnable {
+
+    static String User;
+    static Thread Send[] = new Thread[40];
+    static Thread Recive[] = new Thread[40];
+    int j = 0;
+    private final String ip;
+    private final int port;
+    private final int clientnumber;
+
+    User(String ip, int port, int clientnumber) {
+        this.ip = ip;
+        this.port = port + 25000;
+        this.clientnumber = clientnumber;
+    }
+
+    @Override
+    public void run() {
+        Send[clientnumber] = new Thread(new Send(ip, port, clientnumber));
+        Recive[clientnumber] = new Thread(new Recive(ip, port, clientnumber));
+        Send[clientnumber].start();
+        Recive[clientnumber].start();
+    }
 }
 
 class Send implements Runnable {
@@ -135,7 +177,7 @@ class Send implements Runnable {
     int port;
     PrintWriter out;
 
-    Send(String ip, int clientnumber, int port) {
+    Send(String ip, int port, int clientnumber) {
         this.ip = ip;
         this.port = port + 25000;
         this.clientnumber = clientnumber;
@@ -201,7 +243,8 @@ class Send implements Runnable {
                         break;
                     case 2:
                         System.out.println("Check");
-
+                        Offen of = new Offen();
+                        of.main();
                         break;
                     default:
                         break;
@@ -221,8 +264,8 @@ class Recive implements Runnable {
     public BufferedReader read;
     Connection con = null;
     String url = "jdbc:mysql://localhost/controllab";
-    
-    static String Studentusername;
+
+    String Studentusername;
     public int count = 1;
     public String ip;
 
@@ -265,11 +308,12 @@ class Recive implements Runnable {
                         try (PrintWriter out = new PrintWriter(s.getOutputStream())) {
                             if (rec.next()) {
                                 System.out.println("success");
-                                out.println("login");
-                                out.flush();
+                                /*out.println("login");
+                                out.flush();*/
                                 out.println("success");
                                 out.flush();
                                 Studentusername = user;
+                                User.User = user;
                             } else {
                                 System.out.println("failed");
                                 out.println("failed");
