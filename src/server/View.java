@@ -74,6 +74,7 @@ public class View extends javax.swing.JFrame {
         addstudent = new javax.swing.JButton();
         addcourse = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -106,6 +107,13 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Ban list");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -113,6 +121,7 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
                     .addComponent(addstudent)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -127,8 +136,10 @@ public class View extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(addcourse)
                 .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, -1, -1));
@@ -147,13 +158,16 @@ public class View extends javax.swing.JFrame {
     private void addcourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addcourseActionPerformed
         b.editcourse();
     }//GEN-LAST:event_addcourseActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        b.banlist();
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     public static void main(String[] args) {
         Login a = new Login();
         a.setModal(true);
         a.setVisible(true);
         if (a.confirm) {
-            System.out.println("1");
             View v = new View();
             v.setVisible(true);
             Connect connect = new Connect();
@@ -165,6 +179,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JButton addcourse;
     private javax.swing.JButton addstudent;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

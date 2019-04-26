@@ -39,6 +39,7 @@ public class Student {
         @Override
         public void run() {
             String msg;
+            System.out.println("hello");
             try {
                 ss = new ServerSocket(25005);
                 while (true) {
@@ -55,7 +56,11 @@ public class Student {
                             System.out.println("Test");
                             //Run Restart
                             break;
-                        case "login":
+                        case "success":
+                            JOptionPane.showMessageDialog(null, "login Successfully");
+                            StudentLogin.a();
+                            break;
+                        case "failed":
                             JOptionPane.showMessageDialog(null, "login Successfully");
                             StudentLogin.a();
                             break;

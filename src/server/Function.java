@@ -5,7 +5,6 @@
  */
 package server;
 
-
 /**
  *
  * @author admin
@@ -20,6 +19,16 @@ public class Function {
     public void editcourse() {
         Editcourse ec = new Editcourse();
         ec.main();
+    }
+
+    public void checkoffen() {
+        Offen of = new Offen();
+        of.main();
+    }
+    
+    public void banlist() {
+        Banlist bl = new Banlist();
+        bl.main();
     }
 
 }
