@@ -205,7 +205,7 @@ public class Addsubject extends javax.swing.JDialog {
         Section = jComboBox2.getSelectedItem().toString();
         Confirm = true;
 
-        String query = "INSERT INTO `register`(`St_Username`, `Co_Title`, `Co_Sec`) VALUES ('" + Editstudent.user + "','" + Subject + "','" + Section + "')";
+        String query = "INSERT INTO `register`(`St_Username`, `Co_Title`, `Co_Section`) VALUES ('" + Editstudent.user + "','" + Subject + "','" + Section + "')";
         Query(query, "Inserted");
     }//GEN-LAST:event_jButton2ActionPerformed
 

@@ -5,9 +5,17 @@
  */
 package server;
 
+import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import static server.Connect.onoff;
 
@@ -16,27 +24,74 @@ import static server.Connect.onoff;
  * @author admin
  */
 public class View extends javax.swing.JFrame {
+
     static JButton jb[] = new JButton[40];
-    JPanel jp1 = new JPanel();
+    JLabel jt[] = new JLabel[40];
+    JPanel jp[] = new JPanel[40];
     Function b = new Function();
-    
+    int k = 0, l = 0;
+    String ip[] = new String[40];
     static ImageIcon on = new ImageIcon("src/IMG/on.png");
     static ImageIcon off = new ImageIcon("src/IMG/off.png");
-    
-    
-    
+
     /**
      * Creates new form View
      */
     public View() {
         initComponents();
-        for (int i = 0; i < 40; i++) {
+        /*for (int i = 0; i < 40; i++) {
             jb[i] = new JButton();
             jPanel1.add(jb[i]);
+        }*/
+        
+        IPList();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 8; j++) {
+                jb[k] = new JButton();
+                jt[k] = new JLabel(ip[k]);
+                jp[k] = new JPanel();
+                jp[k].setBackground(Color.yellow);
+                jp[k].add(jb[k]);
+                jp[k].add(jt[k]);
+                jPanel1.add(jp[k]);
+                k++;
+            }
         }
         
     }
     
+    private void IPList() {
+        Connection connection = getconnect();
+        String sql = " SELECT * FROM  ip";
+        PreparedStatement pre;
+        ResultSet rs;
+        int i = 0;
+        try {
+            pre = connection.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                ip[i] = rs.getString("IP_Address");
+                onoff[i] = "offline";
+                i++;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Editcourse.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Connection getconnect() {
+        Connection con;
+        String url = "jdbc:mysql://localhost/controllab";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, "root", "");
+            return con;
+        } catch (Exception ex) {
+            Logger.getLogger(Editcourse.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     static TimerTask checkarray = new TimerTask() {
         public void run() {
             int k = 0;
@@ -75,14 +130,14 @@ public class View extends javax.swing.JFrame {
         addcourse = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 51, 102));
-        jPanel1.setLayout(new java.awt.GridLayout(5, 8));
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 510, 330));
+        jPanel1.setLayout(new java.awt.GridLayout(5, 8, 2, 1));
 
         jPanel2.setBackground(new java.awt.Color(255, 102, 0));
 
@@ -114,6 +169,13 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Edit IP");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -121,6 +183,7 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3)
                     .addComponent(jButton2)
                     .addComponent(addstudent)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -137,12 +200,35 @@ public class View extends javax.swing.JFrame {
                 .addComponent(addcourse)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, -1, -1));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 230, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -152,7 +238,7 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_addstudentActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void addcourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addcourseActionPerformed
@@ -162,7 +248,11 @@ public class View extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         b.banlist();
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     public static void main(String[] args) {
         Login a = new Login();
         a.setModal(true);
@@ -171,15 +261,15 @@ public class View extends javax.swing.JFrame {
             View v = new View();
             v.setVisible(true);
             Connect connect = new Connect();
-        connect.createserver();
+            connect.createserver();
         }
-        /**/
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addcourse;
     private javax.swing.JButton addstudent;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import static server.Editstudent.user;
 
 /**
  *
@@ -25,6 +27,8 @@ public class Banlist extends javax.swing.JFrame {
     /**
      * Creates new form Banlist
      */
+    String Name;
+
     public Banlist() {
         initComponents();
         Showdata();
@@ -62,7 +66,20 @@ public class Banlist extends javax.swing.JFrame {
             new String [] {
                 "Number", "Name"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -87,7 +104,20 @@ public class Banlist extends javax.swing.JFrame {
             new String [] {
                 "Number", "Name"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -175,6 +205,38 @@ public class Banlist extends javax.swing.JFrame {
         Query(query, "Inserted", 2);
         jTextField2.setText("");
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int i = jTable1.getSelectedRow();
+        TableModel t = jTable1.getModel();
+        Name = t.getValueAt(i, 1).toString();
+        if (evt.getClickCount() == 2) {
+            String s = (String) JOptionPane.showInputDialog(
+                    null,"Ban Web name",null,
+                    JOptionPane.PLAIN_MESSAGE,null,null,Name);
+            if ((s != null) && (s.length() > 0)) {
+                String query = "UPDATE `banweb` SET `Name`='" + s + "' WHERE `banweb`.`Co_Title`= 'Programming' AND `banweb`.`Co_Section`= '1' AND `banweb`.`Name` = '"+ Name +"'";
+                Query(query, "Update",3);
+            }
+            
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        int i = jTable2.getSelectedRow();
+        TableModel t = jTable2.getModel();
+        Name = t.getValueAt(i, 1).toString();
+        if (evt.getClickCount() == 2) {
+            String s = (String) JOptionPane.showInputDialog(
+                    null,"Input Program name",null,
+                    JOptionPane.PLAIN_MESSAGE,null,null,Name);
+            if ((s != null) && (s.length() > 0)) {
+                String query = "UPDATE `banprogram` SET `Name`='" + s + "' WHERE `banprogram`.`Co_Title`= 'Programming' AND `banprogram`.`Co_Section`= '1' AND `banprogram`.`Name` = '"+ Name +"'";
+                Query(query, "Update",4);
+            }
+            
+        }
+    }//GEN-LAST:event_jTable2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -289,20 +351,32 @@ public class Banlist extends javax.swing.JFrame {
     public void Query(String query, String message, int id) {
         Connection con = getconnect();
         Statement st;
-        DefaultTableModel model;
+        DefaultTableModel model1,model2;
         try {
             st = con.createStatement();
             if (st.executeUpdate(query) == 1) {
-                if (id == 1) {
-                    model = (DefaultTableModel) jTable1.getModel();
-                    JOptionPane.showMessageDialog(null, "Data " + message + " Successfully");
-                    model.setRowCount(0);
-                    Showdata();
-                } else {
-                    model = (DefaultTableModel) jTable2.getModel();
-                    JOptionPane.showMessageDialog(null, "Data " + message + " Successfully");
-                    model.setRowCount(0);
-                    Showdata2();
+                model1 = (DefaultTableModel) jTable1.getModel();
+                model2 = (DefaultTableModel) jTable2.getModel();
+                JOptionPane.showMessageDialog(null, "Data " + message + " Successfully");
+                switch (id) {
+                    case 1:
+                        model1.setRowCount(0);
+                        Showdata();
+                        break;
+                    case 2:
+                        model2.setRowCount(0);
+                        Showdata2();
+                        break;
+                    case 3:
+                        model1.setRowCount(0);
+                        Showdata();
+                        break;
+                    case 4:
+                        model2.setRowCount(0);
+                        Showdata2();
+                        break;
+                    default:
+                        break;
                 }
 
             } else {
