@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Project/Programs/Project/src/server/Offen.java</file>
             <file>file:/D:/Project/Programs/Project/src/teacher/Teacher.java</file>
             <file>file:/D:/Project/Programs/Project/src/student/StudentLogin.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Student.java</file>
@@ -10,10 +11,17 @@
             <file>file:/D:/Project/Programs/Project/src/server/Function.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Register.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Editcourse.java</file>
+            <file>file:/D:/Project/Programs/Project/src/lab/DetectProgram.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Offender.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/EditIP.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Addcourse.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Banlist.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Addsubject.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Editstudent.java</file>
+            <file>file:/D:/Project/Programs/Project/src/server/Ban.java</file>
+            <file>file:/D:/Project/Programs/Project/src/student/DetectProgram.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Login.java</file>
+            <file>file:/D:/Project/Programs/Project/src/student/BlockProgram.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/View.java</file>
             <file>file:/D:/Project/Programs/Project/src/student/Student.java</file>
             <file>file:/D:/Project/Programs/Project/src/server/Connect.java</file>

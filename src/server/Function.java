@@ -30,5 +30,13 @@ public class Function {
         Banlist bl = new Banlist();
         bl.main();
     }
+    
+    public void editIP() {
+        
+    }
+    
+    public void editGateway() {
+        
+    }
 
 }

@@ -9,12 +9,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -28,7 +26,7 @@ public class Editcourse extends javax.swing.JFrame {
     /**
      * Creates new form Editcourse
      */
-    String subject ,sec;
+    String subject, sec;
 
 // Table
     public Editcourse() {
@@ -164,23 +162,20 @@ public class Editcourse extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        /*Addcourse a = new Addcourse();
-        a.main();*/
         Addcourse a = new Addcourse();
         a.setModal(true);
         a.setVisible(true);
         if (a.Confirm) {
-            String query = "INSERT INTO `course`(`Co_Title`, `Co_Section`, `Te_Username`) VALUES ('" + a.Subject + "','" + a.Section + "','"+Login.Teacherusername+"')";
+            String query = "INSERT INTO `course`(`Co_Title`, `Co_Section`, `Te_Username`) VALUES ('" + a.Subject + "','" + a.Section + "','" + Login.Teacherusername + "')";
             Query(query, "Inserted");
         }
-        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         String query;
         query = "DELETE FROM `register` WHERE `Co_Title`='" + subject + "' AND `Co_Section`='" + sec + "'";
         subQuery(query, "Delete");
-        
+
         query = "DELETE FROM `course` WHERE `Co_Title`='" + subject + "' AND `Co_Section`='" + sec + "'";
         Query(query, "Delete");
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -219,7 +214,7 @@ public class Editcourse extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -251,7 +246,7 @@ public class Editcourse extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public Connection getconnect() {
         Connection con;
         String url = "jdbc:mysql://localhost/controllab";
@@ -264,7 +259,7 @@ public class Editcourse extends javax.swing.JFrame {
             return null;
         }
     }
-    
+
     public ArrayList<Course> CourseList() {
         ArrayList<Course> courselist = new ArrayList<>();
         Connection connection = getconnect();
@@ -285,7 +280,7 @@ public class Editcourse extends javax.swing.JFrame {
         }
         return courselist;
     }
-    
+
     public void Showdata() {
         ArrayList<Course> list = CourseList();
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
@@ -296,7 +291,7 @@ public class Editcourse extends javax.swing.JFrame {
             model.addRow(row);
         }
     }
-    
+
     public void Query(String query, String message) {
         Connection con = getconnect();
         Statement st;
@@ -314,7 +309,7 @@ public class Editcourse extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }
-    
+
     public void subQuery(String query, String message) {
         Connection con = getconnect();
         Statement st;

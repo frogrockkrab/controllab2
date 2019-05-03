@@ -124,10 +124,7 @@ public class StudentLogin extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        if (c) {
-            System.out.println("ooooooooooooooooooooooooooooooooo");
-        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
     public static void a() {
         a.setVisible(false);

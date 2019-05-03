@@ -6,16 +6,21 @@
 package server;
 
 import java.awt.Color;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import static server.Connect.onoff;
 
@@ -26,11 +31,12 @@ import static server.Connect.onoff;
 public class View extends javax.swing.JFrame {
 
     static JButton jb[] = new JButton[40];
-    JLabel jt[] = new JLabel[40];
+    static JLabel jt[] = new JLabel[40];
     JPanel jp[] = new JPanel[40];
     Function b = new Function();
     int k = 0, l = 0;
     String ip[] = new String[40];
+    static String defaultgateway;
     static ImageIcon on = new ImageIcon("src/IMG/on.png");
     static ImageIcon off = new ImageIcon("src/IMG/off.png");
 
@@ -39,11 +45,7 @@ public class View extends javax.swing.JFrame {
      */
     public View() {
         initComponents();
-        /*for (int i = 0; i < 40; i++) {
-            jb[i] = new JButton();
-            jPanel1.add(jb[i]);
-        }*/
-        
+
         IPList();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 8; j++) {
@@ -57,9 +59,9 @@ public class View extends javax.swing.JFrame {
                 k++;
             }
         }
-        
+
     }
-    
+
     private void IPList() {
         Connection connection = getconnect();
         String sql = " SELECT * FROM  ip";
@@ -70,15 +72,18 @@ public class View extends javax.swing.JFrame {
             pre = connection.prepareStatement(sql);
             rs = pre.executeQuery();
             while (rs.next()) {
-                ip[i] = rs.getString("IP_Address");
-                onoff[i] = "offline";
+                if (i < 40) {
+                    ip[i] = rs.getString("IP_Address");
+                } else {
+                    defaultgateway = rs.getString("IP_Address");
+                }
                 i++;
             }
         } catch (Exception ex) {
             Logger.getLogger(Editcourse.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public Connection getconnect() {
         Connection con;
         String url = "jdbc:mysql://localhost/controllab";
@@ -91,30 +96,6 @@ public class View extends javax.swing.JFrame {
             return null;
         }
     }
-
-    static TimerTask checkarray = new TimerTask() {
-        public void run() {
-            int k = 0;
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 5; j++) {
-                    System.out.print(onoff[k++] + "\t");
-                }
-                System.out.println();
-            }
-            System.out.println();
-            for (int i = 0; i < 40; i++) {
-                if (onoff[i].equals("online")) {
-                    jb[i].setEnabled(true);
-                    jb[i].setIcon(on);
-                    onoff[i] = "offline";
-                } else {
-                    jb[i].setEnabled(false);
-                    jb[i].setIcon(off);
-                }
-            }
-        }
-    };
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -238,7 +219,38 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_addstudentActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        /*try {
+            send = new Socket(ip, 25005);
+            out = new PrintWriter(send.getOutputStream());
+            out.println("Shutdown");
+            out.flush();
+            out.println("111.111.111.111");
+            out.flush();
+            send.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Send.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        Socket send;
+        PrintWriter out;
+        IPList();
+        for (int i = 0; i < 40; i++) {
+            System.out.println(Connect.onoff[i]);
+            if (Connect.onoff[i].equals("online") || Connect.onoff[i].equals("wait")) {
+                System.out.println(ip[i]);
+                try {
+                    send = new Socket(ip[i], 25005);
+                    out = new PrintWriter(send.getOutputStream());
+                    out.println("blocknet");
+                    out.flush();
+                    out.println("111.111.111.111");
+                    out.flush();
+                    send.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Send.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void addcourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addcourseActionPerformed
@@ -250,8 +262,43 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        Object[] options = {"Edit IP", "Set gateway"};
+        int n = JOptionPane.showOptionDialog(null,
+                "choose function",
+                "choose command", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        switch (n) {
+            case 0:
+                EditIP eip = new EditIP();
+                eip.main();
+                break;
+            case 1:
+                String s = (String) JOptionPane.showInputDialog(
+                        null, "Set Default Gateway", null,
+                        JOptionPane.PLAIN_MESSAGE, null, null, defaultgateway);
+                if ((s != null) && (s.length() > 0)) {
+                    defaultgateway = s;
+                    String query = "UPDATE `ip` SET `IP_Address`= '" + s + "' WHERE `Number` = '41'";
+                    Query(query, "Update");
+                }
+                break;
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    public void Query(String query, String message) {
+        Connection con = getconnect();
+        Statement st;
+        try {
+            st = con.createStatement();
+            if (st.executeUpdate(query) == 1) {
+                JOptionPane.showMessageDialog(null, "Data " + message + " Successfully");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data " + message + " failed");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         Login a = new Login();

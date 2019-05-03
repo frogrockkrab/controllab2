@@ -46,14 +46,13 @@ public class Student {
                     r = ss.accept();
                     read = new BufferedReader(new InputStreamReader(r.getInputStream()));
                     msg = read.readLine();
-                    System.out.println(msg);
                     switch (msg) {
                         case "Shutdown":
-                            System.out.println("Test");
+                            System.out.println(msg);
                             //Run shutdown
                             break;
                         case "Restart":
-                            System.out.println("Test");
+                            System.out.println(msg);
                             //Run Restart
                             break;
                         case "success":
@@ -61,8 +60,17 @@ public class Student {
                             StudentLogin.a();
                             break;
                         case "failed":
-                            JOptionPane.showMessageDialog(null, "login Successfully");
-                            StudentLogin.a();
+                            JOptionPane.showMessageDialog(null, "login faield");
+                            break;
+                        case "blocknet":
+                            System.out.println(msg);
+                            msg = read.readLine();
+                            System.out.println(msg);
+                            break;
+                        case "unblocknet":
+                            System.out.println(msg);
+                            msg = read.readLine();
+                            System.out.println(msg);
                             break;
                         default:
                             port = Integer.parseInt(msg);

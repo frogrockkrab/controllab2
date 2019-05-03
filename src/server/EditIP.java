@@ -9,22 +9,27 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import static server.View.jt;
 
 /**
  *
  * @author admin
  */
-public class Offen extends javax.swing.JFrame {
+public class EditIP extends javax.swing.JFrame {
 
     /**
-     * Creates new form Offen
+     * Creates new form EditIP
      */
-    public Offen() {
+    int index;
+
+    public EditIP() {
         initComponents();
         Showdata();
     }
@@ -41,26 +46,30 @@ public class Offen extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Offen List"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("IP List"));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Discription", "Time", "Img"
+                "Computer", "IP"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -76,13 +85,11 @@ public class Offen extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jLabel1.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,25 +97,35 @@ public class Offen extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int i = jTable1.getSelectedRow();
+        TableModel t = jTable1.getModel();
+        index = (int) t.getValueAt(i, 0);
+        String ip = t.getValueAt(i, 1).toString();
+        if (evt.getClickCount() == 2) {
+            String s = (String) JOptionPane.showInputDialog(
+                    null, "Input Program name", null,
+                    JOptionPane.PLAIN_MESSAGE, null, null, ip);
+            if ((s != null) && (s.length() > 0)) {
+                String query = "UPDATE `ip` SET `IP_Address`='" + s + "' WHERE `Number` = '" + index + "'";
+                Query(query, "Update");
+            }
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
     
     /**
      * @param args the command line arguments
@@ -127,25 +144,24 @@ public class Offen extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Offen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditIP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Offen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditIP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Offen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditIP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Offen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditIP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Offen().setVisible(true);
+                new EditIP().setVisible(true);
             }
         });
-        jLabel1.setText(User.User);
     }
-    
+
     public Connection getconnect() {
         Connection con;
         String url = "jdbc:mysql://localhost/controllab";
@@ -158,41 +174,57 @@ public class Offen extends javax.swing.JFrame {
             return null;
         }
     }
-    
-    public ArrayList<Offender> OffenderList() {
-        ArrayList<Offender> offenderlist = new ArrayList<>();
+
+    public ArrayList<Ban> IPList() {
+        ArrayList<Ban> iplist = new ArrayList<>();
         Connection connection = getconnect();
-        String sql = "SELECT * FROM `offender` WHERE `St_Username` = '" + User.User + "'";
+        String sql = " SELECT * FROM  ip WHERE `Number` != 41";
         PreparedStatement pre;
         ResultSet rs;
         try {
             pre = connection.prepareStatement(sql);
             rs = pre.executeQuery();
-            Offender offender;
+            Ban ip;
             while (rs.next()) {
-                offender = new Offender(rs.getString("Discription"), rs.getString("Time"), rs.getString("Path_Image"));
-                offenderlist.add(offender);
+                ip = new Ban(rs.getString("IP_Address"));
+                iplist.add(ip);
             }
         } catch (Exception ex) {
             Logger.getLogger(Editcourse.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return offenderlist;
+        return iplist;
     }
-    
-    private void Showdata() {
-        ArrayList<Offender> list = OffenderList();
+
+    public void Showdata() {
+        ArrayList<Ban> list = IPList();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        Object[] row = new Object[3];
+        Object[] row = new Object[2];
         for (int i = 0; i < list.size(); i++) {
-            row[0] = list.get(i).getDiscription();
-            row[1] = list.get(i).getTime();
-            row[2] = list.get(i).getPath();
+            row[0] = i + 1;
+            row[1] = list.get(i).getBan();
             model.addRow(row);
         }
     }
 
+    public void Query(String query, String message) {
+        Connection con = getconnect();
+        Statement st;
+        try {
+            st = con.createStatement();
+            if (st.executeUpdate(query) == 1) {
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                JOptionPane.showMessageDialog(null, "Data " + message + " Successfully");
+                model.setRowCount(0);
+                Showdata();
+            } else {
+                JOptionPane.showMessageDialog(null, "Data " + message + " failed");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

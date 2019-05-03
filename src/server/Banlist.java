@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import static server.Editstudent.user;
 
 /**
  *
@@ -52,8 +51,6 @@ public class Banlist extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -159,14 +156,8 @@ public class Banlist extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton4)))
+                            .addComponent(jButton3)
+                            .addComponent(jButton4))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -178,15 +169,11 @@ public class Banlist extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButton3)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                .addComponent(jButton4)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -194,16 +181,23 @@ public class Banlist extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String query = "INSERT INTO `banweb`(`Co_Title`, `Co_Section`, `Name`) VALUES ('Programming','1','" + jTextField1.getText() + "')";
-        Query(query, "Inserted", 1);
-        jTextField1.setText("");
-
+        String s = (String) JOptionPane.showInputDialog(
+                    null,"Ban Web name",null,
+                    JOptionPane.PLAIN_MESSAGE,null,null,null);
+            if ((s != null) && (s.length() > 0)) {
+                String query = "INSERT INTO `banweb`(`Co_Title`, `Co_Section`, `Name`) VALUES ('" + Login.Subject + "','" + Login.Section + "','" + s + "')";
+                Query(query, "Inserted", 1);
+            }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        String query = "INSERT INTO `banprogram`(`Co_Title`, `Co_Section`, `Name`) VALUES ('Programming','1','" + jTextField2.getText() + "')";
-        Query(query, "Inserted", 2);
-        jTextField2.setText("");
+        String s = (String) JOptionPane.showInputDialog(
+                    null,"Ban Web name",null,
+                    JOptionPane.PLAIN_MESSAGE,null,null,null);
+            if ((s != null) && (s.length() > 0)) {
+                String query = "INSERT INTO `banprogram`(`Co_Title`, `Co_Section`, `Name`) VALUES ('" + Login.Subject + "','" + Login.Section + "','" + s + "')";
+                Query(query, "Inserted", 2);
+            }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -215,7 +209,7 @@ public class Banlist extends javax.swing.JFrame {
                     null,"Ban Web name",null,
                     JOptionPane.PLAIN_MESSAGE,null,null,Name);
             if ((s != null) && (s.length() > 0)) {
-                String query = "UPDATE `banweb` SET `Name`='" + s + "' WHERE `banweb`.`Co_Title`= 'Programming' AND `banweb`.`Co_Section`= '1' AND `banweb`.`Name` = '"+ Name +"'";
+                String query = "UPDATE `banweb` SET `Name`='" + s + "' WHERE `banweb`.`Co_Title`= '" + Login.Subject + "' AND `banweb`.`Co_Section`= '" + Login.Section + "' AND `banweb`.`Name` = '"+ Name +"'";
                 Query(query, "Update",3);
             }
             
@@ -231,7 +225,7 @@ public class Banlist extends javax.swing.JFrame {
                     null,"Input Program name",null,
                     JOptionPane.PLAIN_MESSAGE,null,null,Name);
             if ((s != null) && (s.length() > 0)) {
-                String query = "UPDATE `banprogram` SET `Name`='" + s + "' WHERE `banprogram`.`Co_Title`= 'Programming' AND `banprogram`.`Co_Section`= '1' AND `banprogram`.`Name` = '"+ Name +"'";
+                String query = "UPDATE `banprogram` SET `Name`='" + s + "' WHERE `banprogram`.`Co_Title`= '" + Login.Subject + "' AND `banprogram`.`Co_Section`= '" + Login.Section + "' AND `banprogram`.`Name` = '"+ Name +"'";
                 Query(query, "Update",4);
             }
             
@@ -289,7 +283,7 @@ public class Banlist extends javax.swing.JFrame {
     public ArrayList<Ban> BanWebList() {
         ArrayList<Ban> BanWebList = new ArrayList<>();
         Connection connection = getconnect();
-        String sql = "SELECT * FROM `banweb` WHERE `Co_Title` = 'Programming' AND `Co_Section` = 1";
+        String sql = "SELECT * FROM `banweb` WHERE `Co_Title` = '" + Login.Subject + "' AND `Co_Section` = '" + Login.Section + "'";
         PreparedStatement pre;
         ResultSet rs;
         try {
@@ -320,7 +314,7 @@ public class Banlist extends javax.swing.JFrame {
     public ArrayList<Ban> BanProgranmList() {
         ArrayList<Ban> BanProgranmList = new ArrayList<>();
         Connection connection = getconnect();
-        String sql = "SELECT * FROM `banprogram` WHERE `Co_Title` = 'Programming' AND `Co_Section` = 1";
+        String sql = "SELECT * FROM `banprogram` WHERE `Co_Title` = '" + Login.Subject + "' AND `Co_Section` = '" + Login.Section + "'";
         PreparedStatement pre;
         ResultSet rs;
         try {
@@ -396,7 +390,5 @@ public class Banlist extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

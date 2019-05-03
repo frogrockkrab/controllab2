@@ -35,8 +35,9 @@ public class Connect {
     public static ServerSocket ss;
     public static Socket sock;
     static String ip;
-    String[] ipclient = new String[80];
-    String[] ipall = new String[80];
+    String[] ipclient = new String[40];
+
+    static String[] ipall = new String[40];
     static String[] onoff = new String[40];
     ArrayList<Integer> list = new ArrayList<>();
     int clientnumber;
@@ -60,7 +61,7 @@ public class Connect {
 
     private void IPList() {
         Connection connection = getconnect();
-        String sql = " SELECT * FROM  ip";
+        String sql = " SELECT * FROM  ip WHERE `Number` != '41'";
         PreparedStatement pre;
         ResultSet rs;
         int i = 0;
@@ -100,10 +101,11 @@ public class Connect {
                 if (onoff[i].equals("online")) {
                     jb[i].setEnabled(true);
                     jb[i].setIcon(View.on);
-                    onoff[i] = "offline";
+                    onoff[i] = "wait";
                 } else {
                     jb[i].setEnabled(false);
                     jb[i].setIcon(View.off);
+                    onoff[i] = "offline";
                 }
             }
         }
@@ -142,6 +144,11 @@ public class Connect {
         }
         return i;
     }
+
+    public String[] getIpall() {
+        return ipall;
+    }
+
 }
 
 class User implements Runnable {
@@ -167,6 +174,7 @@ class User implements Runnable {
         Send[clientnumber].start();
         Recive[clientnumber].start();
     }
+
 }
 
 class Send implements Runnable {
@@ -287,7 +295,6 @@ class Recive implements Runnable {
                 if (msg.equals("online")) {
                     Connect.onoff[clientnumber] = "online";
                 } else if (msg.equals("login")) {
-                    System.out.println("//////////////////////////////////////LOgin/////////////////////////////////");
                     String user, pass;
                     user = read.readLine();
                     pass = read.readLine();
@@ -308,8 +315,6 @@ class Recive implements Runnable {
                         try (PrintWriter out = new PrintWriter(s.getOutputStream())) {
                             if (rec.next()) {
                                 System.out.println("success");
-                                /*out.println("login");
-                                out.flush();*/
                                 out.println("success");
                                 out.flush();
                                 Studentusername = user;
@@ -325,12 +330,10 @@ class Recive implements Runnable {
                         e.printStackTrace();
                     }
                 }
-                System.out.println("client 39 " + msg);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        System.out.println(clientnumber + " offline Stop");
     }
     Thread Timer = new Thread(new Runnable() {
         @Override
