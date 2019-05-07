@@ -29,6 +29,7 @@ public class Student {
     PrintWriter out;
     public String msg;
     static int port = 25000;
+    static String Subject, Section;
 
     public void study() {
         con();
@@ -36,6 +37,9 @@ public class Student {
 
     }
     Thread Reciver = new Thread(new Runnable() {
+        Process process = null;
+        BufferedReader bufferRead = null;
+
         @Override
         public void run() {
             String msg;
@@ -49,14 +53,63 @@ public class Student {
                     switch (msg) {
                         case "Shutdown":
                             System.out.println(msg);
-                            //Run shutdown
+
+                            try {
+                                process = Runtime.getRuntime().exec("cmd /c D:\\Project\\Programs\\Project\\src\\batchfile\\shutdown.bat");
+                                bufferRead = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                                String line = null;
+                                while ((line = bufferRead.readLine()) != null) {
+                                    System.out.println(line);
+                                }
+
+                                if (process.exitValue() == 0) {
+                                    System.out.println("Command start sucess...");
+                                } else {
+                                    System.out.println("Command start fail...");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                try {
+                                    process.destroy();
+                                    bufferRead.close();
+                                } catch (IOException e) {
+                                }
+                            }
                             break;
                         case "Restart":
                             System.out.println(msg);
-                            //Run Restart
+                            try {
+                                process = Runtime.getRuntime().exec("cmd /c D:\\Project\\Programs\\Project\\src\\batchfile\\restart.bat");
+                                bufferRead = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                                String line = null;
+                                while ((line = bufferRead.readLine()) != null) {
+                                    System.out.println(line);
+                                }
+
+                                if (process.exitValue() == 0) {
+                                    System.out.println("Command start sucess...");
+                                } else {
+                                    System.out.println("Command start fail...");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                try {
+                                    process.destroy();
+                                    bufferRead.close();
+                                } catch (IOException e) {
+                                }
+                            }
                             break;
                         case "success":
                             JOptionPane.showMessageDialog(null, "login Successfully");
+                            Subject = read.readLine();
+                            System.out.println(Subject);
+                            Section = read.readLine();
+                            System.out.println(Section);
                             StudentLogin.a();
                             break;
                         case "failed":
@@ -94,7 +147,7 @@ public class Student {
 
                 public void run() {
                     try {
-                        s = new Socket("localhost", port);
+                        s = new Socket("25.13.78.14", port);
                         PrintWriter out = new PrintWriter(s.getOutputStream());
                         out.println("online");
                         out.flush();
@@ -109,7 +162,7 @@ public class Student {
 
     public void con() {
         try {
-            s = new Socket("localhost", port);
+            s = new Socket("25.13.78.14", port);
             s.close();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
@@ -125,7 +178,7 @@ public class Student {
 
     public void send(String msg) {
         try {
-            s = new Socket("localhost", port);
+            s = new Socket("25.13.78.14", port);
             PrintWriter out1 = new PrintWriter(s.getOutputStream());
             out1.println(msg);
             out1.flush();

@@ -13,6 +13,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,12 +36,13 @@ public class BlockProgram {
     String Viewer;
     String exec_command = "tasklist.exe /FO LIST";
     Timer timer;
+    int count = 1;
 
     public BlockProgram() {
         timer = new Timer();
-        timer.schedule(blockprogram,0, 5*1000);
+        timer.schedule(blockprogram, 0, 5 * 1000);
     }
-    
+
     private ArrayList<String> GetProcessListData() {
         ArrayList<String> data = new ArrayList<String>();
 
@@ -61,14 +66,35 @@ public class BlockProgram {
     }
 
     private ArrayList<String> GetBanList() {
-        ArrayList<String> ban = new ArrayList<String>();
+        ArrayList<String> BanProgranmList = new ArrayList<>();
+        Connection connection = getconnect();
+        //String sql = "SELECT * FROM `banprogram` WHERE `Co_Title` = '" + Student.Subject + "' AND `Co_Section` = '" + Student.Section + "'";
+        String sql = "SELECT * FROM `banprogram` WHERE `Co_Title` = 'algorithm' AND `Co_Section` = '3'";
+        PreparedStatement pre;
+        ResultSet rs;
+        try {
+            pre = connection.prepareStatement(sql);
+            rs = pre.executeQuery();
+            String ban;
+            while (rs.next()) {
+                ban = rs.getString("Name");
+                BanProgranmList.add(ban);
+            }
+        } catch (Exception ex) {
+        }
+        return BanProgranmList;
+    }
 
-        ban.add("Garena");
-        ban.add("Discord");
-        ban.add("Steam");
-
-        return ban;
-
+    public Connection getconnect() {
+        Connection con;
+        String url = "jdbc:mysql://localhost/controllab";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, "root", "");
+            return con;
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public void cap() throws Exception {
@@ -79,14 +105,14 @@ public class BlockProgram {
 
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         BlockProgram C = new BlockProgram();
-        
+
     }
 
     TimerTask blockprogram = new TimerTask() {
         public void run() {
-            
+            System.out.println("//////////////////////" + count++ + "////////////////////");
             ArrayList<String> Data = GetProcessListData();
             ArrayList<String> Ban = GetBanList();
             ArrayList<String> all_bannedlist = new ArrayList<>();

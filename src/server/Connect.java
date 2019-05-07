@@ -37,7 +37,6 @@ public class Connect {
     static String ip;
     String[] ipclient = new String[40];
 
-    static String[] ipall = new String[40];
     static String[] onoff = new String[40];
     ArrayList<Integer> list = new ArrayList<>();
     int clientnumber;
@@ -119,7 +118,7 @@ public class Connect {
                 sock = ss.accept();
                 clientnumber = button();
                 onoff[clientnumber] = "online";
-                user[clientnumber] = new Thread(new User(ipall[clientnumber], list.get(clientnumber), clientnumber));
+                user[clientnumber] = new Thread(new User(ipclient[clientnumber], list.get(clientnumber), clientnumber));
                 user[clientnumber].start();
             }
         } catch (IOException ex) {
@@ -136,17 +135,13 @@ public class Connect {
 
     public int button() {
         int i;
+        String ipt = getip();
         for (i = 0; i < 40; i++) {
-            if (getip().equals(ipclient[i])) {
-                System.out.println(i);
+            if (ipt.equals(ipclient[i])) {
                 break;
             }
         }
         return i;
-    }
-
-    public String[] getIpall() {
-        return ipall;
     }
 
 }
@@ -169,6 +164,7 @@ class User implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("IP "+ip+" port "+port+" client "+clientnumber );
         Send[clientnumber] = new Thread(new Send(ip, port, clientnumber));
         Recive[clientnumber] = new Thread(new Recive(ip, port, clientnumber));
         Send[clientnumber].start();
@@ -194,6 +190,7 @@ class Send implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("this is "+ip);
         try {
             send = new Socket(ip, 25005);
             out = new PrintWriter(send.getOutputStream());
@@ -317,7 +314,11 @@ class Recive implements Runnable {
                                 System.out.println("success");
                                 out.println("success");
                                 out.flush();
-                                Studentusername = user;
+                                out.println(Login.Subject);
+                                out.flush();
+                                out.println(Login.Section);
+                                out.flush();
+                                //Studentusername = user;
                                 User.User = user;
                             } else {
                                 System.out.println("failed");

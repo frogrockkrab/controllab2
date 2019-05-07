@@ -113,7 +113,7 @@ public class StudentLogin extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            Socket s = new Socket("localhost", port);
+            Socket s = new Socket("25.13.78.14", port);
             PrintWriter out1 = new PrintWriter(s.getOutputStream());
             out1.println("login");
             out1.flush();

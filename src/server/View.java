@@ -14,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -22,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import static server.Connect.onoff;
 
 /**
  *
@@ -219,17 +217,6 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_addstudentActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /*try {
-            send = new Socket(ip, 25005);
-            out = new PrintWriter(send.getOutputStream());
-            out.println("Shutdown");
-            out.flush();
-            out.println("111.111.111.111");
-            out.flush();
-            send.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Send.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
         Socket send;
         PrintWriter out;
         IPList();
