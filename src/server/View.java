@@ -8,6 +8,9 @@ package server;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -94,6 +97,7 @@ public class View extends javax.swing.JFrame {
             return null;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -110,6 +114,7 @@ public class View extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jToggleButton1 = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -155,6 +160,13 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        jToggleButton1.setText("block");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -162,13 +174,14 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToggleButton1)
                     .addComponent(jButton3)
                     .addComponent(jButton2)
                     .addComponent(addstudent)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addcourse, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,7 +194,9 @@ public class View extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addComponent(jToggleButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -258,6 +273,7 @@ public class View extends javax.swing.JFrame {
             case 0:
                 EditIP eip = new EditIP();
                 eip.main();
+                validate();
                 break;
             case 1:
                 String s = (String) JOptionPane.showInputDialog(
@@ -271,6 +287,23 @@ public class View extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        String gateway;
+        try {
+            InetAddress a = InetAddress.getByName("192.168.1.255");
+            DatagramSocket s = new DatagramSocket();
+            if (jToggleButton1.isSelected()) {
+                gateway = "192.168.0.0#";
+            } else {
+                gateway = defaultgateway + "#";
+            }
+            DatagramPacket p = new DatagramPacket(gateway.getBytes(), gateway.getBytes().length, a, 8888);
+            s.send(p);
+        } catch (Exception ex) {
+        }
+
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     public void Query(String query, String message) {
         Connection con = getconnect();
@@ -289,10 +322,10 @@ public class View extends javax.swing.JFrame {
 
     public static void main(String[] args) {
         Login a = new Login();
+        View v = new View();
         a.setModal(true);
         a.setVisible(true);
         if (a.confirm) {
-            View v = new View();
             v.setVisible(true);
             Connect connect = new Connect();
             connect.createserver();
@@ -306,5 +339,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }

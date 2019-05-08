@@ -24,6 +24,8 @@ public class StudentLogin extends javax.swing.JFrame {
     static StudentLogin a;
     static Student b;
     static boolean c = false;
+    String host = "localhost";
+    //String host = "25.13.78.14";
 
     public StudentLogin() {
         setUndecorated(true);
@@ -113,7 +115,7 @@ public class StudentLogin extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            Socket s = new Socket("25.13.78.14", port);
+            Socket s = new Socket(host, port);
             PrintWriter out1 = new PrintWriter(s.getOutputStream());
             out1.println("login");
             out1.flush();
